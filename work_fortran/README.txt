@@ -1,1 +1,1 @@
-LAPACK is need software in this file.
+LAPACK is need software in this dir.
