@@ -1,13 +1,6 @@
       program void
         IMPLICIT NONE
-        
-        
-	!Q(kx,ky)
-	type k_Q 
-        	real(kind(0d0)) :: kx,ky
-        	real(kind(0d0)) :: Q
-        end type k_Q
-        
+       
         integer,parameter :: N = 64
         real(kind(0d0)),parameter :: pre = 0.001d0
 
@@ -26,11 +19,9 @@
         ! ap is hamiltonian,E is E(nx,ny,num)
         integer :: status,status2
         
-        type(k_Q) ,Allocatable :: E(:,:,:) !E(nx,ny,quantum_num) 
-        type(k_Q) ,Allocatable :: E_sita(:)
 
 !==================================================================!
-!       HOPPING PARAMETER && filling                               !
+!       Filling && HOPPING PARAMETER                               !
 !==================================================================!
 
         double precision, PARAMETER :: en=0.6d0                                                       
@@ -47,8 +38,8 @@
 !          f(2)->(PI.0)                                            !
 !          f(3)->(PI,PI)                                           !
 !==================================================================!
-        character(50) :: cmd
-        character(50) :: dir,mas
+        character(30) :: cmd
+        character(30) :: dir,mas
         character(20) :: FN(3),FM(3)
         integer,PARAMETER ::f(3)=(/1,0,1/),f_En(3)=(/1,2,1/)
 
@@ -60,7 +51,7 @@
         LIWORK = 5*m + 3
         LWORK = m*m + 6*m + 1
         Allocate (ap(m*(m+1)/2),w(m),work(lwork),z(ldz,m),iwork(liwork))
-        Allocate (E(0:N,0:N,m),E_sita(N),b(-N:N,-N:N,m))
+        Allocate (b(-N:N,-N:N,m))
         JOB = 'V'
         UPLO = 'L'
         PI = acos(-1.0d0)
@@ -103,6 +94,7 @@
 !====================================================================!
 !       Defining of mu from filling                                  !
 !====================================================================!
+
         E_min=0d0
         E_max=0d0
  
@@ -174,9 +166,6 @@
          close(nout2+i)
       end do
 
-!=====================================================================!
-!	Making master_file					      !
-!=====================================================================!
       OPEN(UNIT=nout2+1,FILE =FM(1),STATUS="old",IOSTAT=status2)
       OPEN(UNIT=nout2+2,FILE =FM(2),STATUS="old",IOSTAT=status2)
       OPEN(UNIT=nout2+3,FILE =FM(3),STATUS="old",IOSTAT=status2)
@@ -252,12 +241,7 @@
       end do
 
       close(114)
-      
 
-
-      	 
-      	 
-      
       CONTAINS
       
       SUBROUTINE Hamiltonian_2(k,ap)
@@ -273,16 +257,16 @@
       END SUBROUTINE Hamiltonian_2
       
       
-      SUBROUTINE kx_ky2r_sita(k)
-      			real(kind(0d0)),INTENT(INOUT) :: k(2)
-      			real(kind(0d0)) :: a(2)
-      			a(1) = k(1)**2 + k(2)**2
-      			a(1) = a(1)**(0.5)
-      			a(2)=atan(k(2)/k(1))
-      			k(1)=a(1)
-      			k(2)=a(2)
+!      SUBROUTINE kx_ky2r_sita(k)
+!      			real(kind(0d0)),INTENT(INOUT) :: k(2)
+!      			real(kind(0d0)) :: a(2)
+!      			a(1) = k(1)**2 + k(2)**2
+!      			a(1) = a(1)**(0.5)
+!      			a(2)=atan(k(2)/k(1))
+!      			k(1)=a(1)
+!      			k(2)=a(2)
       
-      END SUBROUTINE kx_ky2r_sita	       
+!      END SUBROUTINE kx_ky2r_sita	       
 
       SUBROUTINE N_Es(a, n, E,ne)
         real (kind(0d0)),INTENT(OUT) :: ne
@@ -335,10 +319,10 @@
               a = E
            END IF
            
-      !     IF(i>20) then
-    !          print *, ne,i
-       !       exit
-      !     end if
+!           IF(i>20) then
+!              print *, ne,i
+!              exit
+!           end if
         
         end do
         print *,'ne=',ne
@@ -346,4 +330,5 @@
       END SUBROUTINE E_two_law 
 
 
-      end program void        
+      end program void
+

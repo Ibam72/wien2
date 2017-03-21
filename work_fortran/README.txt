@@ -1,1 +1,12 @@
 LAPACK is need software in this dir.
+
+
+Strength_FS_ORB.f90
+
+This file need mkdir_with_argument.sh.
+FS.plt paint Fermi Surface made by this file.
+
+
+spherical_harmonics_func.plt
+
+this file paint spherical harmonics function of dx2-y2 or dxy
